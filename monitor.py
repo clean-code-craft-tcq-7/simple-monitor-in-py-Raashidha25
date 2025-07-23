@@ -2,6 +2,9 @@
 from time import sleep
 import sys
 
+
+
+
 def blinkoutput():
   for i in range(6):
       print('\r* ', end='')
@@ -10,17 +13,22 @@ def blinkoutput():
       print('\r *', end='')
       sys.stdout.flush()
       sleep(1)
+      
 def vitals_ok(temperature, pulseRate, spo2):
-  if ((95 <= temperature <= 102 )and (60 <= pulseRate <= 100 )and spo2 >= 90):
-    print('Vitals are OK!')
-    blinkoutput()
-    return True
-  if (95 > temperature > 102 ) :
-    print('Temperature critical!')
-  if 60 > pulseRate > 100:
-    print('Pulse Rate is out of range!')
-  if spo2 < 90:
-    print('Oxygen Saturation out of range!')
+  
+  vitals = {
+    "Temperature": (temperature, 95, 102),
+    "Pulse Rate": (pulseRate, 60, 100),
+    "SpO2": (spo2, 90, 100)
+   }
+
+  for name,(value, min, max) in vitals.items():
+    if not(min <= value <=max):
+       print(f"{name} is out of range!")
+       blinkoutput()
+       return False
+  
+  print('Vitals are OK!')
   blinkoutput()
-  return False
+  return True
   
